@@ -8,6 +8,17 @@ dotenv.config();
   }
 
 // TODO: Define a class for the Weather object
+class Weather {
+  temperature: number;
+  humidity: number;
+  windSpeed: number;
+
+  constructor(temperature: number, humidity: number, windSpeed: number) {
+    this.temperature = temperature;
+    this.humidity = humidity;
+    this.windSpeed = windSpeed;
+  }
+}
 
 // TODO: Complete the WeatherService class
 class WeatherService {
