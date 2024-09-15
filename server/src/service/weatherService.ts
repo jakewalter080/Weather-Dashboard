@@ -22,8 +22,21 @@ class Weather {
 
 // TODO: Complete the WeatherService class
 class WeatherService {
-  // TODO: Define the baseURL, API key, and city name properties
 
+  // TODO: Define the baseURL, API key, and city name properties
+  private apiKey: string
+  private baseURL: string
+  private cityName: string
+
+  constructor( 
+    baseURL: string = 'https://api.openweathermap.org/data/2.5/',
+    apiKey: string = process.env.WEATHER_API_KEY || '',
+    cityName: string = `Chicago`
+  );
+    this.baseURL = baseURL;
+    this.apiKey = apiKey;
+    this.cityName = cityName;
+  }
   // TODO: Create fetchLocationData method
   // private async fetchLocationData(query: string) {}
   // TODO: Create destructureLocationData method
