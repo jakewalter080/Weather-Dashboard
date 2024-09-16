@@ -126,10 +126,45 @@ class WeatherService {
  
   // TODO: Complete buildForecastArray method
   // private buildForecastArray(currentWeather: Weather, weatherData: any[]) {}
-  
+  private buildForecastArray(currentWeather: Weather, weatherData: any[]): Weather[] {
+    const forecastArray: Weather[] = [];
+    for (let i = 0; i < weatherData.length; i++) {
+      const date = new Date(weatherData[i].dt * 1000);
+      const cityName = currentWeather.cityName;
+      const iconCode = weatherData[i].weather[0].icon;
+      const description = weatherData[i].weather[0].description;
+      const temperature = weatherData[i].main.temp;
+      const humidity = weatherData[i].main.humidity;
+      const windSpeed = weatherData[i].wind.speed;
+      forecastArray.push(new Weather(date, cityName, iconCode, description, temperature, humidity, windSpeed));
+    }
+    return forecastArray;
+  }
   
   // TODO: Complete getWeatherForCity method
   // async getWeatherForCity(city: string) {}
+  async getWeatherForCity(city: string): Promise<{ current: Weather, forecast: Weather[] }> {
+    this.cityName = city;
+    const coordinates = await this.fetchAndDestructureLocationData();
+    const weatherData = await this.fetchWeatherData(coordinates);
+    const forecastData = await this.fetchForecastData(coordinates);
+
+    const currentWeather = this.parseWeather(weatherData, city);
+    const forecast = this.buildForecastArray(forecastData, city);
+
+    this.addToSearchHistory(city);
+
+    return { current: currentWeather, forecast };
+  }
+
+  private addToSearchHistory(city: string): void {
+    if (!this.searchHistory.includes(city)) {
+      this.searchHistory.unshift(city);
+      if (this.searchHistory.length > 10) { // Limit history to 10 items
+        this.searchHistory.pop();
+      }
+    }
+  }
 }
 
 export default new WeatherService();
