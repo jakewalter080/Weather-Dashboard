@@ -40,9 +40,10 @@ class Weather {
 class WeatherService {
 
   // TODO: Define the baseURL, API key, and city name properties
-  private apiKey: string
-  private baseURL: string
-  private cityName: string
+  private apiKey: string;
+  private baseURL: string;
+  private cityName: string;
+  private searchHistory: string[] = [];
 
   constructor(
     baseURL: string = 'https://api.openweathermap.org/data/2.5/',
@@ -55,32 +56,48 @@ class WeatherService {
   }
 }
   // TODO: Create fetchLocationData method
+    // private async fetchLocationData(query: string) {}
 
-  private async fetchLocationData(query: string): Promise<Coordinates> {
-    const geocodeURL = `https://api.openweathermap.org/data/2.5/weather?q=${query}&appid=${this.apiKey}`;
+  public async fetchLocationData(query: string): Promise<Coordinates> {
+    const geocodeURL = `${this.baseURL}geo/1.0/direct?q=${query}&limit=1&appid=${this.apiKey}`;
+    const response = await fetch(geocodeURL);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    return this.destructureLocationData(data[0]);
+  }
 
-  // private async fetchLocationData(query: string) {}
   // TODO: Create destructureLocationData method
-
   // private destructureLocationData(locationData: Coordinates): Coordinates {}
+  private destructureLocationData(locationData: any): Coordinates {
+    return {
+      latitude: locationData.lat,
+      longitude: locationData.lon
+    };
+  }
+  
   // TODO: Create buildGeocodeQuery method
-
   // private buildGeocodeQuery(): string {}
+  private buildGeocodeQuery(): string {
+    return `${this.cityName}`;
+  }
+  
   // TODO: Create buildWeatherQuery method
-
   // private buildWeatherQuery(coordinates: Coordinates): string {}
+  
   // TODO: Create fetchAndDestructureLocationData method
-
   // private async fetchAndDestructureLocationData() {}
+  
   // TODO: Create fetchWeatherData method
-
   // private async fetchWeatherData(coordinates: Coordinates) {}
+  
   // TODO: Build parseCurrentWeather method
-
   // private parseCurrentWeather(response: any) {}
+ 
   // TODO: Complete buildForecastArray method
-
   // private buildForecastArray(currentWeather: Weather, weatherData: any[]) {}
+  
   // TODO: Complete getWeatherForCity method
   // async getWeatherForCity(city: string) {}
 }
