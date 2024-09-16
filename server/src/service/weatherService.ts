@@ -1,4 +1,6 @@
 import dotenv from 'dotenv';
+import { query, response } from 'express';
+import { url } from 'inspector';
 dotenv.config();
 
 // TODO: Define an interface for the Coordinates object
@@ -43,7 +45,7 @@ class WeatherService {
   private apiKey: string;
   private baseURL: string;
   private cityName: string;
-  private searchHistory: string[] = [];
+  
 
   constructor(
     baseURL: string = 'https://api.openweathermap.org/data/2.5/',
@@ -56,31 +58,31 @@ class WeatherService {
   }
 }
   // TODO: Create fetchLocationData method
-    private async fetchLocationData(query: string): Promise<Coordinates> {
-      const geocodeURL = `${this.baseURL}geo/1.0/direct?q=${query}&limit=1&appid=${this.apiKey}`;
-      const response = await fetch(geocodeURL);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      return this.destructureLocationData(data[0]);
+  private async fetchLocationData(query: string): Promise<Coordinates> {
+    const geocodeURL: string = `${this.baseURL}geo/1.0/direct?q=${query}&limit=1&appid=${this.apiKey}`;
+    const response: Response = await fetch(geocodeURL);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-  
-    // TODO: Create destructureLocationData method
-    private destructureLocationData(locationData: Coordinates): Coordinates {
-      return {
-        latitude: locationData.latitude,
-        longitude: locationData.longitude
-      };
-    }
+    const data: any = await response.json();
+    return this.destructureLocationData(data[0]);
+  }
 
   // TODO: Create destructureLocationData method
-  private destructureLocationData(locationData: Coordinates): Coordinates {
+  private destructureLocationData(locationData: any): Coordinates {
     return {
       latitude: locationData.latitude,
       longitude: locationData.longitude
     };
   }
+  }
+  
+  // Call the destructureLocationData method somewhere in your code
+  const locationData: Coordinates = {
+    latitude: 0,
+    longitude: 0
+  };
+  const destructuredData = this.destructureLocationData(locationData);
   
   // TODO: Create buildGeocodeQuery method
   // private buildGeocodeQuery(): string {}
@@ -109,8 +111,8 @@ class WeatherService {
   // private async fetchWeatherData(coordinates: Coordinates) {}
   private async fetchWeatherData(coordinates: Coordinates): Promise<any> {
     const url = this.buildWeatherQuery(coordinates);
-    const response = await fetch(url);
-    if (!response.ok) {
+    const response = await fetch(url),
+    if (: any!response: any.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     return await response.json();
@@ -170,6 +172,11 @@ class WeatherService {
       }
     }
   }
+}
+
+export default new WeatherService();
+function fetchLocationData(query: (options: import("qs").IParseOptions<undefined> | { (str: string, options?: (import("qs").IParseOptions<import("qs").BooleanOptional> & { decoder?: undefined; }) | undefined): import("qs").ParsedQs; (str: string | Record<string, string>, options?: import("qs").IParseOptions<import("qs").BooleanOptional> | undefined): { [key: string]: unknown; }; }) => import("express").Handler, string: any) {
+  throw new Error('Function not implemented.');
 }
 
 export default new WeatherService();

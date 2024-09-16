@@ -1,15 +1,12 @@
 import { Router } from 'express';
 const router = Router();
 
-// import HistoryService from '../../service/historyService.js';
 import HistoryService from '../../service/historyService.js';
-// import WeatherService from '../../service/weatherService.js';
 import WeatherService from '../../service/weatherService.js';
-// import { City } from '../../service/historyService.js';
-import { City } from '../../service/historyService.js';
+import City from '../../service/historyService.js';
 
 // TODO: POST Request with city name to retrieve weather data
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
 // check if the city name is provided
 try {
   const { city } = req.body;
@@ -18,7 +15,7 @@ try {
   }
 
   // TODO: GET weather data from city name
-  const weatherData = await WeatherService.getWeatherForCity(city);
+  const weatherData = await WeatherService.getWeather(city);
   // TODO: save city to search history
   await HistoryService.addCity(city);
 
