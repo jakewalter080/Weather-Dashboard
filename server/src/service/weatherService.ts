@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 import { query, response } from 'express';
 import { url } from 'inspector';
-import axios from 'axios';
 dotenv.config();
 
 // TODO: Define an interface for the Coordinates object
@@ -12,13 +11,13 @@ dotenv.config();
 
 // TODO: Define a class for the Weather object
 class Weather {
-  // date: Date;
-  // cityName: string;
-  // iconCode: string;
-  // description: string;
-  // temperature: number;
-  // humidity: number;
-  // windSpeed: number;
+  date: Date;
+  cityName: string;
+  iconCode: string;
+  description: string;
+  temperature: number;
+  humidity: number;
+  windSpeed: number;
 
   constructor(
     date: Date,
@@ -29,13 +28,13 @@ class Weather {
     humidity: number,
     windSpeed: number
   ) {
-    // this.date = date;
-    // this.cityName = cityName;
-    // this.iconCode = iconCode;
-    // this.description = description;
-    // this.temperature = temperature;
-    // this.humidity = humidity;
-    // this.windSpeed = windSpeed;
+    this.date = date;
+    this.cityName = cityName;
+    this.iconCode = iconCode;
+    this.description = description;
+    this.temperature = temperature;
+    this.humidity = humidity;
+    this.windSpeed = windSpeed;
   }
 }
 
@@ -50,8 +49,9 @@ class WeatherService {
   private searchHistory: string[] = [];
   
 
+  // Remove the 'private' keyword before the constructor
   constructor(
-    baseURL: string = 'https://api.openweathermap.org/data/2.5/',
+    baseURL: string = "https://api.openweathermap.org/data/2.5",
     apiKey: string = process.env.WEATHER_API_KEY || '',
     cityName: string = `Chicago`
   ) {
@@ -178,12 +178,12 @@ class WeatherService {
   // async getWeatherForCity(city: string) {}
   async getWeatherForCity(city: string): Promise<{ current: Weather, forecast: Weather[] }> {
     this.cityName = city;
-    const coordinates = await this.fetchAndDestructureLocationData();
-    const weatherData = await this.fetchWeatherData(coordinates);
-    const forecastData = await this.fetchForecastData(coordinates);
+    const coordinates: Coordinates = await this.fetchAndDestructureLocationData();
+    const weatherData: any = await this.fetchWeatherData(coordinates);
+    const forecastData: any = await this.fetchForecastData(coordinates);
   
-    const currentWeather = this.parseWeather(weatherData, city);
-    const forecast = this.buildForecastArray(forecastData, city);
+    const currentWeather: Weather = this.parseWeather(weatherData, city);
+    const forecast: Weather[] = this.buildForecastArray(forecastData, city);
   
     this.addToSearchHistory(city);
   
@@ -206,3 +206,11 @@ class WeatherService {
 // }
 
 export default new WeatherService();
+
+// function buildGeocodeQuery() {
+//   throw new Error('Function not implemented.');
+// }
+// function parseWeather(data: any, any: any) {
+//   throw new Error('Function not implemented.');
+// }
+
