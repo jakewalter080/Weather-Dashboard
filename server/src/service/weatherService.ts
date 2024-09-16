@@ -102,12 +102,31 @@ class WeatherService {
   
   // TODO: Create fetchWeatherData method
   // private async fetchWeatherData(coordinates: Coordinates) {}
+  private async fetchWeatherData(coordinates: Coordinates): Promise<any> {
+    const url = this.buildWeatherQuery(coordinates);
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return await response.json();
+  }
   
   // TODO: Build parseCurrentWeather method
   // private parseCurrentWeather(response: any) {}
+  private parseCurrentWeather(response: any): Weather {
+    const date = new Date(response.dt * 1000);
+    const cityName = response.name;
+    const iconCode = response.weather[0].icon;
+    const description = response.weather[0].description;
+    const temperature = response.main.temp;
+    const humidity = response.main.humidity;
+    const windSpeed = response.wind.speed;
+    return new Weather(date, cityName, iconCode, description, temperature, humidity, windSpeed);
+  }
  
   // TODO: Complete buildForecastArray method
   // private buildForecastArray(currentWeather: Weather, weatherData: any[]) {}
+  
   
   // TODO: Complete getWeatherForCity method
   // async getWeatherForCity(city: string) {}
