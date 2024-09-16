@@ -56,24 +56,29 @@ class WeatherService {
   }
 }
   // TODO: Create fetchLocationData method
-    // private async fetchLocationData(query: string) {}
-
-  public async fetchLocationData(query: string): Promise<Coordinates> {
-    const geocodeURL = `${this.baseURL}geo/1.0/direct?q=${query}&limit=1&appid=${this.apiKey}`;
-    const response = await fetch(geocodeURL);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    private async fetchLocationData(query: string): Promise<Coordinates> {
+      const geocodeURL = `${this.baseURL}geo/1.0/direct?q=${query}&limit=1&appid=${this.apiKey}`;
+      const response = await fetch(geocodeURL);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      return this.destructureLocationData(data[0]);
     }
-    const data = await response.json();
-    return this.destructureLocationData(data[0]);
-  }
+  
+    // TODO: Create destructureLocationData method
+    private destructureLocationData(locationData: Coordinates): Coordinates {
+      return {
+        latitude: locationData.latitude,
+        longitude: locationData.longitude
+      };
+    }
 
   // TODO: Create destructureLocationData method
-  // private destructureLocationData(locationData: Coordinates): Coordinates {}
   private destructureLocationData(locationData: Coordinates): Coordinates {
     return {
-      latitude: locationData.lat,
-      longitude: locationData.lon
+      latitude: locationData.latitude,
+      longitude: locationData.longitude
     };
   }
   
@@ -123,7 +128,7 @@ class WeatherService {
     const windSpeed = response.wind.speed;
     return new Weather(date, cityName, iconCode, description, temperature, humidity, windSpeed);
   }
- 
+  
   // TODO: Complete buildForecastArray method
   // private buildForecastArray(currentWeather: Weather, weatherData: any[]) {}
   private buildForecastArray(currentWeather: Weather, weatherData: any[]): Weather[] {
@@ -148,15 +153,15 @@ class WeatherService {
     const coordinates = await this.fetchAndDestructureLocationData();
     const weatherData = await this.fetchWeatherData(coordinates);
     const forecastData = await this.fetchForecastData(coordinates);
-
+  
     const currentWeather = this.parseWeather(weatherData, city);
     const forecast = this.buildForecastArray(forecastData, city);
-
+  
     this.addToSearchHistory(city);
-
+  
     return { current: currentWeather, forecast };
   }
-
+  
   private addToSearchHistory(city: string): void {
     if (!this.searchHistory.includes(city)) {
       this.searchHistory.unshift(city);
