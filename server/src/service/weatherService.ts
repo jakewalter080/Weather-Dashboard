@@ -70,7 +70,7 @@ class WeatherService {
 
   // TODO: Create destructureLocationData method
   // private destructureLocationData(locationData: Coordinates): Coordinates {}
-  private destructureLocationData(locationData: any): Coordinates {
+  private destructureLocationData(locationData: Coordinates): Coordinates {
     return {
       latitude: locationData.lat,
       longitude: locationData.lon
@@ -80,14 +80,25 @@ class WeatherService {
   // TODO: Create buildGeocodeQuery method
   // private buildGeocodeQuery(): string {}
   private buildGeocodeQuery(): string {
-    return `${this.cityName}`;
+    return this.cityName;
   }
   
   // TODO: Create buildWeatherQuery method
   // private buildWeatherQuery(coordinates: Coordinates): string {}
+  private buildWeatherQuery(coordinates: Coordinates): string {
+    return `${this.baseURL}weather?lat=${coordinates.latitude}&lon=${coordinates.longitude}&appid=${this.apiKey}&units=imperial`;
+  }
+
+  private buildForecastQuery(coordinates: Coordinates): string {
+    return `${this.baseURL}forecast?lat=${coordinates.latitude}&lon=${coordinates.longitude}&appid=${this.apiKey}&units=imperial`;
+  }
   
   // TODO: Create fetchAndDestructureLocationData method
   // private async fetchAndDestructureLocationData() {}
+  private async fetchAndDestructureLocationData(): Promise<Coordinates> {
+    const query = this.buildGeocodeQuery();
+    return await this.fetchLocationData(query);
+  }
   
   // TODO: Create fetchWeatherData method
   // private async fetchWeatherData(coordinates: Coordinates) {}
