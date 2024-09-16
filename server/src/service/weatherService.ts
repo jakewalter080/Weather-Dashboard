@@ -28,16 +28,22 @@ class WeatherService {
   private baseURL: string
   private cityName: string
 
-  constructor( 
+  constructor(
     baseURL: string = 'https://api.openweathermap.org/data/2.5/',
     apiKey: string = process.env.WEATHER_API_KEY || '',
     cityName: string = `Chicago`
-  );
+  ) {
     this.baseURL = baseURL;
     this.apiKey = apiKey;
     this.cityName = cityName;
   }
+}
   // TODO: Create fetchLocationData method
+
+  async fetchLocationData(coordinates: number): Promise<Weather> {
+    const { latitude, longitude } = coordinates;
+    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${this.apiKey}&units=imperial`;
+
   // private async fetchLocationData(query: string) {}
   // TODO: Create destructureLocationData method
   // private destructureLocationData(locationData: Coordinates): Coordinates {}
